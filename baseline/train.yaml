@@ -1,0 +1,3 @@
+dataset_name: arithmetic
+batch_size: 160
+epoch: 5
