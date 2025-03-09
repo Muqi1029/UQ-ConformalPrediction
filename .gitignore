@@ -173,3 +173,7 @@ cython_debug/
 data/
 
 results/
+test*
+!test/
+wandb
+.gradio
