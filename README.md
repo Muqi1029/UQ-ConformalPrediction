@@ -79,23 +79,21 @@ Explore the dataset [here](https://paperswithcode.com/dataset/medqa-usmle), or d
 
 ## :email:Reach Out
 
-I’m always open to collaborations!
-
-If you’re interested in exploring uncertainty quantification in this form, feel free to reach out to me at **muqi1029@gmail.com**. 
+If you’re interested in exploring uncertainty quantification in this form and have any questions, feel free to reach out to me at **muqi1029@gmail.com**. 
 
 
 
-<!-- ## :book:Citation
+## :book:Citation
 
-```bibtex
+```
 @misc{li2024uncertainty,
   author = {Muqi Li},
   title = {Uncertainty Quantification for Large Language Models in the Medical Domain},
   year = {2024},
-  howpublished = {\url{https://your-blog-url.com}},
+  howpublished = {https://github.com/Muqi1029/UQ-CP},
   note = {Contact: muqi1029@gmail.com}
 }
-``` -->
+``` 
 
 
 
