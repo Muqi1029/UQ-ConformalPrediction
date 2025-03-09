@@ -177,3 +177,6 @@ test*
 !test/
 wandb
 .gradio
+logs
+test
+serve/outputs

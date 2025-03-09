@@ -1,15 +1,16 @@
-from transformers import (
-    AutoTokenizer,
-    AutoModelForSequenceClassification,
-    DataCollatorWithPadding,
-    TrainingArguments,
-    Trainer,
-)
-from datasets import load_dataset
-import yaml
 from functools import partial
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from pprint import pprint
+
+import yaml
+from datasets import load_dataset
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from transformers import (
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
+    DataCollatorWithPadding,
+    Trainer,
+    TrainingArguments,
+)
 
 
 def compute_metrics(
@@ -38,8 +39,8 @@ def load_custom_dataset(dataset_name):
         return load_dataset(
             "json",
             data_files={
-                "train": "data/json/arithmetic/train.json",
-                "test": "data/json/arithmetic/test.json",
+                "train": "data/arithmetic/train.jsonl",
+                "test": "data/arithmetic/test.jsonl",
             },
         )
     elif dataset_name == "imdb":
@@ -54,7 +55,7 @@ def preprocess_function(examples, tokenizer):
 
 def train():
     model, tokenizer = load_model_and_tokenizer()
-    ds = load_custom_dataset(config["dataset_name"])
+    ds = load_custom_dataset(config["dataset_name"]).shuffle()
     func = partial(preprocess_function, tokenizer=tokenizer)
     encoded_dataset = ds.map(func, batched=True)
     data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
@@ -70,6 +71,7 @@ def train():
         per_device_eval_batch_size=config["batch_size"],
         num_train_epochs=config["epoch"],
         weight_decay=0.01,
+        report_to="wandb",
     )
 
     # 初始化Trainer

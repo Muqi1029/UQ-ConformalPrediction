@@ -1,0 +1,7 @@
+
+# gradio
+share: false
+
+# generate
+model_name_or_path: /mnt/user/models/HuatuoGPT2-7B
+calibrate_set_path: ../calibrate/calibration.txt

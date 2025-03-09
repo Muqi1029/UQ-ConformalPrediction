@@ -2,7 +2,6 @@ import torch
 import yaml
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
-
 with open("baseline/eval.yaml") as fout:
     try:
         config = yaml.safe_load(fout)

@@ -12,7 +12,7 @@ Thank you for contributing to our mission of advancing uncertainty quantificatio
 
 
 
-## :robot:Model 
+## :robot:Model
 
 ### HuatuoGPT2-7B
 
@@ -79,7 +79,7 @@ Explore the dataset [here](https://paperswithcode.com/dataset/medqa-usmle), or d
 
 ## :email:Reach Out
 
-If you’re interested in exploring uncertainty quantification in this form and have any questions, feel free to reach out to me at **muqi1029@gmail.com**. 
+If you’re interested in exploring uncertainty quantification in this form and have any questions, feel free to reach out to me at **muqi1029@gmail.com**.
 
 
 
@@ -93,9 +93,4 @@ If you’re interested in exploring uncertainty quantification in this form and 
   howpublished = {https://github.com/Muqi1029/UQ-CP},
   note = {Contact: muqi1029@gmail.com}
 }
-``` 
-
-
-
-
-
+```
