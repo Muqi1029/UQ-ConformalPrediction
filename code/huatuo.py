@@ -1,17 +1,11 @@
-from transformers import AutoModelForCausalLM, AutoTokenizer
-import torch
+import os
 
-model_name_or_path = "/online1/ycsc_wangbenyou/liqi1/models/HuatuoGPT2-7B"
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model_name_or_path = f"{os.environ['HF_HOME']}/models/HuatuoGPT2-7B"
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device}")
-
-prompt_accuracy = """
-告诉我回复的正确性：
-
-句子： 
-准确度
-
-"""
 
 
 def predict():
@@ -31,11 +25,11 @@ def predict():
     for k, v in tokenized_inputs.items():
         tokenized_inputs[k] = v.to(device)
     outputs = model.generate(**tokenized_inputs)
-    response = tokenizer.decode(outputs[0, tokenized_inputs["input_ids"].size(dim=1):], skip_special_tokens=True)
+    response = tokenizer.decode(
+        outputs[0, tokenized_inputs["input_ids"].size(dim=1) :],
+        skip_special_tokens=True,
+    )
     conversation.append({"role": "assistant", "content": response})
-
-    conversation.append({"role": "user", "content": prompt_accuracy})
-    
 
 
 if __name__ == "__main__":
