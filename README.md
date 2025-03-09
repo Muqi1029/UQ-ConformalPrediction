@@ -71,7 +71,7 @@ Explore the dataset [here](https://paperswithcode.com/dataset/medqa-usmle), or d
 
 - [x] **Basic Demo**: Generate confidence scores using the log probability of outputs.
 
-- [ ] **LLM Output Streaming**: Implement real-time streaming of model outputs.
+- [x] **LLM Output Streaming**: Implement real-time streaming of model outputs.
 
 - [ ] **Enhanced Algorithms**: Design more rigorous algorithms or train a model to generate confidence scores effectively.
 
