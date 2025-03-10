@@ -365,7 +365,7 @@ def main(config: DictConfig):
     calibrate_set = np.sort(np.loadtxt(config.calibrate_set_path))
 
     demo = build_demo()
-    demo.launch(share=config.share)
+    demo.launch(share=config.share, server_name=config.server_name, server_port=config.server_port)
 
 
 if __name__ == "__main__":
