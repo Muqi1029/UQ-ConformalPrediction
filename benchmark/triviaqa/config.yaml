@@ -1,0 +1,5 @@
+model_path: "Qwen/Qwen2.5-7B-Instruct"
+
+batch_size: 128
+
+max_new_tokens: 256
