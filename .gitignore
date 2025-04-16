@@ -180,3 +180,6 @@ wandb
 logs
 test
 serve/outputs
+
+outputs
+output

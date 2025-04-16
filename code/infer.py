@@ -6,8 +6,8 @@ from openai import OpenAI
 from sglang import Runtime, assistant, function, gen, set_default_backend, system, user
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-# model_name_or_path = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
-model_name_or_path = "deepseek-chat"
+model_name_or_path = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
+# model_name_or_path = "deepseek-chat"
 # model_name_or_path = "gpt-4o-mini"
 # model_name_or_path = "gpt-4.1-2025-04-14"
 
@@ -33,11 +33,14 @@ def sglang_chat(s):
             name="first_response",
             max_tokens=32,
             return_logprob=True,
+            top_logprobs_num=2,
             return_text_in_logprobs=True,
             temperature=1,
         )
     )
     logprobs = s.get_meta_info("first_response")["output_token_logprobs"]
+    pprint(s.get_meta_info("first_response")["output_top_logprobs"])
+
     sum_logprobs = sum([logprob[0] for logprob in logprobs]) / len(logprobs)
 
     s += user(second_prompt.format(avg_logprobs=sum_logprobs))

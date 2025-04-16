@@ -1,3 +1,5 @@
+from typing import List
+
 from datasets import load_dataset
 
 second_prompt = """
@@ -10,10 +12,10 @@ def load_dataset_util(dataset_name: str):
     if dataset_name == "coqa":
         return load_dataset("coqa", split="train")
     elif dataset_name == "trivia_qa":
-        return load_dataset("TimoImhof/TriviaQA-in-SQuAD-format", name="unmodified")
+        return load_dataset("TimoImhof/TriviaQA-in-SQuAD-format", split="unmodified")
     else:
         raise ValueError(f"Dataset {dataset_name} not found")
 
 
-def judge(pred, answer):
-    return answer in pred.lower()
+def judge(pred, answer: List):
+    return answer[0] in pred.lower()

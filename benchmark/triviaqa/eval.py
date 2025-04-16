@@ -19,7 +19,7 @@ def chat(s, q):
     s += assistant(gen(name="confidence", max_tokens=32))
 
 
-@hydra.main(config_path="triviaqa", config_name="config")
+@hydra.main(config_path=".", config_name="config", version_base=None)
 def main(cfg):
     # load dataset
     dataset = load_dataset_util("trivia_qa")
@@ -32,7 +32,8 @@ def main(cfg):
     confidences = []
 
     batch_size = cfg.batch_size
-    for i in tqdm(range(0, len(dataset), batch_size)):
+    num_batches = (len(dataset) - 1) // batch_size + 1
+    for i in tqdm(range(num_batches)):
         start_idx = batch_size * i
         end_idx = min(start_idx + batch_size, len(dataset))
         states = chat.run_batch(
@@ -42,7 +43,7 @@ def main(cfg):
         preds.extend([s["answer"] for s in states])
         confidences.extend([s["confidence"] for s in states])
         answers.extend(
-            [dataset[i]["answer"]["text"] for i in range(start_idx, end_idx)]
+            [dataset[i]["answers"]["text"] for i in range(start_idx, end_idx)]
         )
 
     # compute acc
@@ -52,7 +53,7 @@ def main(cfg):
     # compute uncertainty
     # confidences = [float(u) for u in confidences]
     # print(f"Average uncertainty: {sum(confidences) / len(confidences)}")
-    with open("triviaqa_results.json", "w") as f:
+    with open("triviaqa/triviaqa_results.json", "w") as f:
         json.dump(
             {
                 "preds": preds,
@@ -61,6 +62,8 @@ def main(cfg):
                 "acc": acc,
             },
             f,
+            indent=4,
+            ensure_ascii=False,
         )
 
 
