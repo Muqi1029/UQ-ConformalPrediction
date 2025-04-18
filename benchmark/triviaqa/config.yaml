@@ -1,5 +1,17 @@
 model_path: "Qwen/Qwen2.5-7B-Instruct"
 
-batch_size: 128
+batch_size: 256
 
 max_new_tokens: 256
+
+# calibration
+recompute_calibration: true
+calibration_file: "triviaqa/calibration.json"
+calibration_sample_size: 1000
+
+# results
+results_file: "triviaqa/results.json"
+
+# debug mode
+debug: true
+sample_size: 2000
