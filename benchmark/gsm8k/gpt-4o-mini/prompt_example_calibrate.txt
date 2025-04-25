@@ -1,0 +1,4 @@
+18
+Confidence: 100%
+
+Rationale: The calculations for the number of eggs Janet sells and the total revenue generated from those sales were straightforward and based on provided figures. There are no ambiguous factors or uncertainties in the arithmetic involved, leading to a definitive conclusion.

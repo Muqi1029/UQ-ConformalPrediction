@@ -3,26 +3,26 @@ hydra:
     dir: .
 
 # model_path: "Qwen/Qwen2.5-7B-Instruct"
-# model_path: "/mnt/user/models/Llama-3.1-8B-Instruct"
-model_path: "gpt-4o-mini"
-
+model_path: "/mnt/user/models/Llama-3.1-8B-Instruct"
+dp_size: 4
+tp_size: 1
 model_name: ${get_last_segment:${model_path}}
 
-batch_size: 64
+batch_size: 640
 
 max_new_tokens: 256
 
 # calibration
 recompute_calibration: false
-calibration_file: "triviaqa/${model_name}/calibration.json"
+calibration_file: "medqa/${model_name}/calibration.json"
 calibration_sample_size: 1000
 enable_calibrate: true
 
 # results
-results_file: "triviaqa/${model_name}/results.json"
+results_file: "medqa/${model_name}/results.json"
 
 # debug mode
-debug: true
+debug: false
 sample_size: 2000
 
 # openai

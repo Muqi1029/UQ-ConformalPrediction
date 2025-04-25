@@ -1,0 +1,34 @@
+<|im_start|>system
+You are a helpful assistant.<|im_end|>
+<|im_start|>user
+Question: Janet’s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?
+<|im_end|>
+<|im_start|>assistant
+To determine how much Janet makes every day from selling the leftover duck eggs at the farmers' market, we need to follow these steps:
+
+1. Calculate the total number of eggs Janet's ducks lay per day.
+2. Determine the number of eggs Janet eats and uses for baking muffins each day.
+3. Subtract the number of eggs used from the total number of eggs laid to find the number of leftover eggs.
+4. Calculate the daily earnings from selling the leftover eggs at the farmers' market.
+
+Let's go through each step in detail:
+
+1. Janet's ducks lay 16 eggs per day.
+2. Janet eats 3 eggs for breakfast and bakes muffins with 4 eggs each day. So, the total number of eggs used by Janet each day is:
+   \[
+   3 + 4 = 7 \text{ eggs}
+   \]
+3. The number of leftover eggs is:
+   \[
+   16 - 7 = 9 \text{ eggs}
+   \]
+4. Janet sells each leftover egg for $2. Therefore, her daily earnings from selling the leftover eggs are:
+   \[
+   9 \times 2 = 18 \text{ dollars}
+   \]
+
+So, the amount Janet makes every day at the farmers' market is \(\boxed{18}\). So the answer is: 18.<|im_end|>
+<|im_start|>user
+Please directly give a confidence score for your answer between 0 and 100, and explain your confidence score. For example, Confidence: 90, Explanation: The answer is correct because...<|im_end|>
+<|im_start|>assistant
+Confidence: 90, Explanation: The answer is correct because the calculation is straightforward and involves basic arithmetic operations. We verified that the total number of eggs laid (16) minus the number of eggs used (7) equals the number of leftover eggs (9), and then we correctly calculated the earnings from selling these eggs at $2 each ($18). The steps are logically sound, and there is a high certainty that the result is accurate.<|im_end|>

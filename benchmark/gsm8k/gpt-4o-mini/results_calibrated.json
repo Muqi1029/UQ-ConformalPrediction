@@ -1,0 +1,22 @@
+{
+    "preds": [
+        "18",
+        "3",
+        "70,000"
+    ],
+    "answers": [
+        "18",
+        "3",
+        "70000"
+    ],
+    "confidences": [
+        100.0,
+        100.0,
+        95.0
+    ],
+    "raw_confidences": [
+        "Confidence: 100%\n\nRationale: The calculations for the number of eggs Janet sells and the total revenue generated from those sales were straightforward and based on provided figures. There are no ambiguous factors or uncertainties in the arithmetic involved, leading to a definitive conclusion.",
+        "Confidence: 100%\n\nRationale: The calculation provided to determine the total number of bolts of fiber required to make the robe was straightforward and based on clear arithmetic. The amounts for blue and white fiber were correctly identified, and the final sum was accurately computed. Therefore, the answer is completely reliable.",
+        "Confidence: 95%\n\nRationale: The calculation of profit from flipping the house is straightforward and based on standard arithmetic operations. The purchase price and repair costs are clearly defined, and the increase in the house's value by 150% is accurately applied to find both the new value and the profit made. Therefore, I'm highly confident that the calculations and the final answer of $70,000 profit are correct."
+    ]
+}

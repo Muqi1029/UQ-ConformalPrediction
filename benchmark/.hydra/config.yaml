@@ -1,0 +1,14 @@
+model_path: gpt-4o-mini
+dp_size: 4
+tp_size: 1
+model_name: ${get_last_segment:${model_path}}
+batch_size: 128
+max_new_tokens: 1024
+recompute_calibration: false
+calibration_file: us_medqa/${model_name}/calibration.json
+calibration_sample_size: 1000
+enable_calibrate: true
+results_file: us_medqa/${model_name}/results.json
+debug: false
+sample_size: 30
+num_threads: 128

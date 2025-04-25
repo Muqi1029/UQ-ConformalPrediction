@@ -6,22 +6,24 @@ import random
 import hydra
 import numpy as np
 from omegaconf import OmegaConf
-from sglang import OpenAI, Runtime, assistant, function, gen, set_default_backend, user
+from sglang import Runtime, assistant, function, gen, select, set_default_backend, user
 from sklearn.metrics import roc_auc_score
 from tqdm import tqdm
-from utils import (
-    extract_confidence,
-    judge,
-    load_dataset_util,
-    logger_setup,
-    no_calibrate_prompt,
-    second_prompt,
-)
+from utils import extract_confidence, load_dataset_util, logger_setup
 
 OmegaConf.register_new_resolver("get_last_segment", lambda path: path.split("/")[-1])
-
-
 first = True
+
+directly_confidence_prompt = "请直接给出你的答案的置信度，介于0和100之间， 并给出解释。"
+logprob_confidence_prompt = """这是第一个回复的对数概率的分位数： {rate}，值越低表示回复越有创意，或可能具有危险性。 请仅以百分比（0–100%）形式直接给出你对该回答的置信度，随后再说明理由。"""
+
+
+def make_prompt(item):
+    p = "给定问题和选项，请从选项中选择最可能的答案。\n"
+    p += f"问题： {item['question']}\n"
+    for k, v in item["options"].items():
+        p += f"选项 {k}: {v}\n"
+    return p
 
 
 def compute_rate(avg_logprobs, calibrate_data):
@@ -37,18 +39,18 @@ def compute_calibration(calibrate_dataset, cfg):
         end_idx = min(start_idx + batch_size, len(calibrate_dataset))
         states = qa.run_batch(
             [
-                {"q": calibrate_dataset[i]["question"]}
+                {"q": make_prompt(calibrate_dataset[i])}
                 for i in range(start_idx, end_idx)
             ],
             max_new_tokens=cfg.max_new_tokens,
         )
         for i, s in enumerate(states):
             # only consider the correct answer
-            if judge(s["answer"], calibrate_dataset[start_idx + i]["answers"]["text"]):
+            if s["answer"] == calibrate_dataset[start_idx + i]["answer_idx"]:
                 avg_logprobs = np.mean(
                     [
                         tok[0]
-                        for tok in s.get_meta_info("answer")["output_token_logprobs"]
+                        for tok in s.get_meta_info("rationale")["output_token_logprobs"]
                     ]
                 )
                 calibrate_data.append(avg_logprobs)
@@ -64,51 +66,53 @@ def compute_calibration(calibrate_dataset, cfg):
 
 @function
 def qa(s, q):
-    s += user(q)
-    s += assistant(gen(name="answer", return_logprob=True))
+    s += user(expr=q)
+    s += assistant(
+        gen(name="rationale", return_logprob=True)
+        + " 所以答案是："
+        + select(name="answer", choices=["A", "B", "C", "D"])
+    )
 
 
 @function
 def chat(s, q, calibrate_data, enable_calibrate=True):
     s += user(q)
-    s += assistant(gen(name="answer", return_logprob=True))
+    s += assistant(
+        gen(name="rationale", return_logprob=True)
+        + " 所以答案是："
+        + select(name="answer", choices=["A", "B", "C", "D"])
+    )
 
     if enable_calibrate:
         avg_logprobs = np.mean(
-            [tok[0] for tok in s.get_meta_info("answer")["output_token_logprobs"]]
+            [tok[0] for tok in s.get_meta_info("rationale")["output_token_logprobs"]]
         )
         rate = compute_rate(avg_logprobs, calibrate_data)
-        s += user(second_prompt.format(rate=rate))
+        s += user(logprob_confidence_prompt.format(rate=rate))
     else:
-        s += user(no_calibrate_prompt)
-    s += assistant(gen(name="confidence", max_tokens=1024))
+        s += user(directly_confidence_prompt)
+    s += assistant(gen(name="confidence"))
 
 
 @hydra.main(config_path=".", config_name="config", version_base=None)
 def main(cfg: OmegaConf):
     logger_setup()
+    logging.info(f"Config: {cfg}")
     model_dir = os.path.dirname(cfg.results_file)
     os.makedirs(model_dir, exist_ok=True)
 
-    logging.info(f"Config: {cfg}")
-
     # load dataset
-    dataset = load_dataset_util("trivia_qa")
+    dataset = load_dataset_util("med_qa")
     if cfg.debug:
         logging.info(f"Debug mode, using {cfg.sample_size} samples")
         dataset = dataset.select(range(cfg.sample_size))
 
     logging.info(f"Loading model from {cfg.model_path}")
-    if cfg.model_path == "gpt-4o-mini":
-        set_default_backend(
-            backend=OpenAI(
-                base_url=os.environ["BASE_URL"],
-                api_key=os.environ["API_KEY"],
-                model_name=cfg.model_path,
-            )
+    set_default_backend(
+        backend=Runtime(
+            model_path=cfg.model_path, dp_size=cfg.dp_size, tp_size=cfg.tp_size
         )
-    else:
-        set_default_backend(backend=Runtime(model_path=cfg.model_path))
+    )
 
     # load calibration
     if not os.path.exists(cfg.calibration_file) or cfg.recompute_calibration:
@@ -137,7 +141,7 @@ def main(cfg: OmegaConf):
         states = chat.run_batch(
             [
                 {
-                    "q": dataset[i]["question"],
+                    "q": make_prompt(dataset[i]),
                     "calibrate_data": calibrate_data,
                     "enable_calibrate": cfg.enable_calibrate,
                 }
@@ -145,10 +149,8 @@ def main(cfg: OmegaConf):
             ],
             max_new_tokens=cfg.max_new_tokens,
         )
+        global first
         for i, s in enumerate(states):
-
-            # save prompt example
-            global first
             if first:
                 if cfg.enable_calibrate:
                     path = os.path.join(model_dir, "prompt_example_calibrate.txt")
@@ -157,7 +159,6 @@ def main(cfg: OmegaConf):
                 with open(path, "w+") as f:
                     f.write(s.text())
                 first = False
-
             confidence = extract_confidence(s["confidence"])
             if confidence != 0:
                 valid_count += 1
@@ -166,10 +167,10 @@ def main(cfg: OmegaConf):
 
                 raw_confidences.append(s["confidence"])
                 confidences.append(confidence)
-                answers.append(dataset[start_idx + i]["answers"]["text"])
+                answers.append(dataset[start_idx + i]["answer_idx"])
 
     # compute accuracy and auroc
-    acc = [judge(p, a) for p, a in zip(preds, answers)]
+    acc = [p == a for p, a in zip(preds, answers)]
     auroc = roc_auc_score(np.array(acc), np.array(confidences))
 
     logging.info(f"Accuracy: {np.mean(acc)}")
@@ -178,9 +179,9 @@ def main(cfg: OmegaConf):
 
     # save results
     if cfg.enable_calibrate:
-        cfg.results_file = cfg.results_file.replace(".json", "_calibrated.json")
+        cfg.results_file = cfg.results_file.replace(".json", "_calibrate.json")
     else:
-        cfg.results_file = cfg.results_file.replace(".json", "_uncalibrated.json")
+        cfg.results_file = cfg.results_file.replace(".json", "_no_calibrate.json")
     with open(cfg.results_file, "w", encoding="utf-8") as f:
         json.dump(
             {
@@ -196,9 +197,8 @@ def main(cfg: OmegaConf):
     # summary tables
     with open("summary.csv", mode="a+", encoding="utf-8") as f:
         f.write(
-            f"triviaqa,{cfg.model_name},{cfg.enable_calibrate},{np.mean(acc)},{auroc},{valid_count / len(dataset)}\n"
+            f"medqa,{cfg.model_name},{str(cfg.enable_calibrate)},{np.mean(acc)},{auroc},{valid_count / len(dataset)}\n"
         )
-
     logging.info(f"Results saved to {cfg.results_file}")
 
 

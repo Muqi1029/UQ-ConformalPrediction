@@ -1,0 +1,2 @@
+18
+Confidence: 100, Explanation: The answer is correct because it accurately reflects the calculations based on the information provided about the number of eggs Janet uses and sells, as well as the selling price per egg.

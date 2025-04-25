@@ -1,0 +1,27 @@
+<|start_header_id|>user<|end_header_id|>
+
+Question: Janet’s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?
+<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+## Step 1: First, calculate the total number of eggs laid per day.
+Janet's ducks lay 16 eggs per day.
+
+## Step 2: Then, determine the total number of eggs Janet consumes and bakes with each day.
+Janet eats 3 eggs for breakfast and bakes with 4, so in total, she uses 7 eggs daily for her personal consumption and baking.
+
+## Step 3: Next, calculate the number of eggs she is left with to sell at the farmers' market.
+She has 16 eggs laid, uses 7 for her personal consumption and baking, so she has 16 - 7 = 9 eggs left for sale.
+
+## Step 4: Calculate how much she makes from selling the eggs at the farmers' market.
+She sells 9 eggs per day at $2 per egg, so she makes 9 * $2 = $18.
+
+The final answer is: $\boxed{18}$ So the answer is: 18<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+
+This is the quantile of the logprobs of the first response:
+13.544668587896252, lower means the response is more creative or has potential of dangerous, please provide the confidence in the answer only in percent (0–100 %) direcly, then following the rationales:
+<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+
+90%
+
+I provided a step-by-step solution to the problem, following a logical and clear format. The answer was calculated correctly using the given information.<|eot_id|>

@@ -1,0 +1,4 @@
+The answer is A.
+Confidence in the answer: 90%
+
+Rationale: The correct action for the resident in this scenario is to disclose the error, as it is both an ethical obligation and a patient safety concern. Transparency in reporting medical errors is crucial for patient trust, future care, and learning within medical practice. Though the attending physician may perceive the complication as minor, the resident has a duty to ensure that all relevant information is documented accurately in the operative report and communicated to the patient. Thus, choosing Option A reflects adherence to ethical standards in medicine.
