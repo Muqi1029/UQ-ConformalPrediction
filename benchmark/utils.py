@@ -1,10 +1,12 @@
 import json
 import logging
 import os
+import random
 import re
 from typing import Callable
 
 import numpy as np
+import torch
 from datasets import load_dataset
 from gsm8k.utils import map_gsm8k
 from medqa.utils import map_medqa
@@ -20,10 +22,18 @@ def logger_setup():
     )
 
 
+def seed_everything(seed: int):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.backends.cudnn.deterministic = True
+
+
 def load_dataset_util(dataset_name: str):
     if dataset_name == "coqa":
         return load_dataset("coqa", split="train")
-    elif dataset_name == "trivia_qa":
+    elif dataset_name == "triviaqa":
         ds = load_dataset("TimoImhof/TriviaQA-in-SQuAD-format", split="unmodified")
         ds = ds.map(map_triviaqa, batched=False)
     elif dataset_name == "medqa_china":
@@ -106,4 +116,16 @@ def compute_calibration(
 
 
 def compute_rate(avg_logprobs, calibrate_data):
-    return np.mean(np.array(calibrate_data) <= avg_logprobs) * 100
+    return (np.mean(np.array(calibrate_data) <= avg_logprobs) * 100).round(2)
+
+
+def extract_choice(s):
+    match = re.search(r"answer is .*?([A-D])", s)
+    if match:
+        return match.group(1)
+    else:
+        match = re.search(r"[A-D]", s)
+        if match:
+            return match.group(0)
+        else:
+            return None

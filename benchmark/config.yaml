@@ -2,6 +2,8 @@ hydra:
   run:
     dir: .
 
+seed: 42
+
 # model_path: "Qwen/Qwen2.5-7B-Instruct"
 # model_path: "/mnt/user/models/Llama-3.1-8B-Instruct"
 model_path: "gpt-4o-mini"
@@ -23,6 +25,7 @@ enable_calibrate: true
 
 # results
 results_dir: "results"
+save_dir: ???
 
 # debug mode
 debug: false

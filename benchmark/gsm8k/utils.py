@@ -14,7 +14,7 @@ def trim_result(output: str) -> Union[str, int]:
 
     numbers = re.findall(r"[-+]?\d*\.\d+|\d+", output)
 
-    return numbers[0] if numbers else None
+    return float(numbers[0]) if numbers else None
 
 
 def gsm_judge(pred, answer):
