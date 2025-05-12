@@ -1,0 +1,16 @@
+datasets==3.2.0
+gradio==5.25.1
+hydra-core==1.3.2
+Markdown==3.7
+numpy==2.2.4
+omegaconf==2.3.0
+openai==1.74.0
+PyYAML==6.0.2
+PyYAML==6.0.2
+scikit_learn==1.6.1
+sglang==0.4.5
+torch==2.5.1
+tqdm==4.67.1
+transformers==4.51.0
+vllm==0.6.4
+xgrammar==0.1.18

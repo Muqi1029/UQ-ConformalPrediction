@@ -1,0 +1,32 @@
+hydra:
+  run:
+    dir: .
+
+# model_path: "Qwen/Qwen2.5-7B-Instruct"
+# model_path: "/mnt/user/models/Llama-3.1-8B-Instruct"
+model_path: "gpt-4o-mini"
+
+dp_size: 1
+tp_size: 1
+model_name: ${get_last_segment:${model_path}}
+dataset_name: gsm8k
+
+batch_size: 440
+
+max_new_tokens: 1024
+temperature: 0.0
+
+# calibration
+recompute_calibration: false
+calibration_sample_size: 500
+enable_calibrate: true
+
+# results
+results_dir: "results"
+
+# debug mode
+debug: false
+sample_size: 3
+
+# openai
+num_threads: 200

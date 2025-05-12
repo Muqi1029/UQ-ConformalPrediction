@@ -1,0 +1,9 @@
+
+# gradio
+share: true
+server_name: 127.0.0.1
+server_port: 7860
+
+# generate
+model_name_or_path: /mnt/user/models/HuatuoGPT2-7B
+calibrate_set_path: ../calibrate/calibration.txt
