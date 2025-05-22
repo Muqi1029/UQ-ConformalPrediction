@@ -19,8 +19,9 @@ max_new_tokens: 1024
 temperature: 0.0
 
 # calibration
-recompute_calibration: false
-calibration_sample_size: 500
+recompute_calibration: true
+calibration_sample_size: 10000
+calibrate_way: "all" # "all" or "mean"
 enable_calibrate: true
 
 # results

@@ -271,8 +271,8 @@ def run_sgl(dataset, sgl_function, make_prompt, judge_function, cfg):
         not os.path.exists(os.path.join(cfg.save_dir, "calibration.json"))
         or cfg.recompute_calibration
     ):
-        logging.info(f"Computing calibration for {cfg.calibration_sample_size} samples")
         calibration_sample_size = min(cfg.calibration_sample_size, len(dataset))
+        logging.info(f"Computing calibration for {calibration_sample_size} samples")
         indices = random.sample(range(len(dataset)), calibration_sample_size)
         calibrate_dataset = dataset.select(indices)
         calibrate_data = compute_calibration(

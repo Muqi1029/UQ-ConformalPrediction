@@ -96,13 +96,14 @@ def compute_calibration(
         )
         for i, s in enumerate(states):
             if judge_function(s["answer"], calibrate_dataset[start_idx + i]["answer"]):
-                avg_logprobs = np.mean(
-                    [
-                        tok[0]
-                        for tok in s.get_meta_info("rationale")["output_token_logprobs"]
-                    ]
-                )
-                calibrate_data.append(avg_logprobs)
+                save_item = [
+                    token[0]
+                    for token in s.get_meta_info("rationale")["output_token_logprobs"]
+                ]
+                if cfg.calibrate_way == "all":
+                    calibrate_data.append(save_item)
+                elif cfg.calibrate_way == "mean":
+                    calibrate_data.append(np.mean(save_item))
 
     with open(
         os.path.join(cfg.save_dir, "calibration.json"), "w", encoding="utf-8"
@@ -116,6 +117,10 @@ def compute_calibration(
 
 
 def compute_rate(avg_logprobs, calibrate_data):
+    if isinstance(calibrate_data[0], list):
+        raise NotImplementedError(
+            "Not implemented for list of logprobs, please set `calibrate_way` to `mean` and recompute calibration by setting `recompute_calibration` to `True`"
+        )
     return (np.mean(np.array(calibrate_data) <= avg_logprobs) * 100).round(2)
 
 

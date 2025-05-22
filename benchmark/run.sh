@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-model_paths=("Qwen/Qwen2-7B-Instruct", "Llama-3.1-8B-Instruct", "gpt-4o-mini")
+# python main.py model_path="Qwen/Qwen2.5-7B-Instruct" dataset_name="gsm8k" tp_size=2 recompute_calibration=true enable_calibrate=true batch_size=330 max_new_tokens=32768 calibrate_way="all"
+model_paths=("Qwen/Qwen2.5-7B-Instruct", "Llama-3.1-8B-Instruct", "gpt-4o-mini")
 
 dataset_names=("gsm8k" "medqa_us" "triviaqa")
 
